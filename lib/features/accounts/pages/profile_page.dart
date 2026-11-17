@@ -5,11 +5,12 @@ import '../../../core/api_client.dart';
 import '../../../core/session.dart';
 import '../../../core/theme.dart';
 import '../services/auth_service.dart';
+import '../models/account_user.dart';
 import '../widgets/auth_error.dart';
 import '../widgets/auth_layout.dart';
 import '../widgets/auth_theme.dart';
 
-/// Halaman utama modul Login & Onboarding. Profil lengkap menyusul.
+/// Profil akun aktif dan logout; pengaturan onboarding menyusul.
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -18,7 +19,35 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Future<AccountUser>? _profile;
   bool _loading = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _profile ??= _fetchProfile();
+  }
+
+  Future<AccountUser> _fetchProfile() async {
+    final session = context.read<Session>();
+    final token = session.token;
+    try {
+      return await AuthService(context.read<ApiClient>()).getProfile();
+    } on ApiException catch (error) {
+      // Jangan menghapus sesi yang lebih baru karena respons request lama.
+      if (error.statusCode == 401 && session.token == token) {
+        await session.signOut();
+      }
+      rethrow;
+    }
+  }
+
+  void _reloadProfile() {
+    setState(() {
+      _profile = _fetchProfile();
+    });
+  }
+
   String? _error;
 
   Future<void> _logout() async {
@@ -37,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (error) {
       if (mounted) {
         setState(() {
-          _error = authErrorMessage(error, loggingIn: false);
+          _error = authErrorMessage(error, action: AuthAction.logout);
         });
       }
     } finally {
@@ -82,7 +111,56 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: MosslySpace.s6),
               Text('Kamu sudah masuk', style: text.headlineSmall),
-              const SizedBox(height: MosslySpace.s2),
+              const SizedBox(height: MosslySpace.s4),
+              FutureBuilder<AccountUser>(
+                future: _profile,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return const Padding(
+                      padding: EdgeInsets.all(MosslySpace.s4),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        AuthError(
+                          message: authErrorMessage(
+                            snapshot.error!,
+                            action: AuthAction.profile,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: _loading ? null : _reloadProfile,
+                          child: const Text('Coba lagi'),
+                        ),
+                      ],
+                    );
+                  }
+                  final user = snapshot.data;
+                  if (user == null) {
+                    return const Text('Data akun belum tersedia.');
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(user.displayName, style: text.titleLarge),
+                      const SizedBox(height: MosslySpace.s2),
+                      Text('@${user.username}'),
+                      const SizedBox(height: MosslySpace.s2),
+                      Text(
+                        user.email.isEmpty ? 'Email belum diisi.' : user.email,
+                      ),
+                      if (user.age != null) ...[
+                        const SizedBox(height: MosslySpace.s2),
+                        Text('Umur: ${user.age} tahun'),
+                      ],
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: MosslySpace.s4),
               Text(
                 'Keluar dari akun setelah selesai menggunakan Mossly.',
                 style: text.bodySmall?.copyWith(color: scheme.onSurfaceVariant),

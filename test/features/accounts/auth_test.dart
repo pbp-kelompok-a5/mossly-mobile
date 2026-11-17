@@ -82,7 +82,15 @@ void main() {
     Session session,
     Future<http.Response> Function(http.Request) handler,
   ) async {
-    final client = MockClient(handler);
+    final client = MockClient((request) async {
+      if (request.method == 'GET' && request.url.path.endsWith('/auth/me/')) {
+        return http.Response(
+          '{"id":1,"username":"sheva","email":"sheva@example.test","display_name":"Sheva","umur":18}',
+          200,
+        );
+      }
+      return handler(request);
+    });
     addTearDown(client.close);
     await tester.pumpWidget(
       MosslyApp(
@@ -153,6 +161,8 @@ void main() {
       expect(restored.token, 'test-token');
 
       await tester.tap(find.byIcon(Icons.person_outline).last);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Keluar'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Keluar'));
       await tester.pumpAndSettle();
@@ -238,6 +248,8 @@ void main() {
         (_) async => http.Response('{"detail":"Gagal"}', status),
       );
       await tester.tap(find.byIcon(Icons.person_outline).last);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Keluar'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Keluar'));
       await tester.pumpAndSettle();

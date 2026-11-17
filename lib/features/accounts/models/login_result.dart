@@ -1,5 +1,4 @@
-/// Token dari respons POST /api/v1/auth/login/.
-/// Data `user` dapat digunakan saat fitur profil dikembangkan berikutnya.
+/// Token dari respons register/login. Profil dibaca melalui auth/me/.
 class LoginResult {
   const LoginResult({required this.token});
 

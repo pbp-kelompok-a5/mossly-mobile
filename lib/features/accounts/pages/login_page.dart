@@ -9,6 +9,7 @@ import '../services/auth_service.dart';
 import '../widgets/auth_error.dart';
 import '../widgets/auth_layout.dart';
 import '../widgets/auth_theme.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (error) {
       if (mounted) {
         setState(() {
-          _error = authErrorMessage(error, loggingIn: true);
+          _error = authErrorMessage(error, action: AuthAction.login);
         });
       }
     } finally {
@@ -180,6 +181,17 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ],
                     ),
+                  ),
+                  const SizedBox(height: MosslySpace.s3),
+                  TextButton(
+                    onPressed: _loading
+                        ? null
+                        : () => Navigator.of(context).push<void>(
+                            MaterialPageRoute(
+                              builder: (_) => const RegisterPage(),
+                            ),
+                          ),
+                    child: const Text('Belum punya akun? Daftar'),
                   ),
                 ],
               ),
