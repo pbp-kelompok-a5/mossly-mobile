@@ -19,7 +19,7 @@ class ApiException implements Exception {
 
 /// Cara aplikasi berbicara dengan web service Django
 /// Contoh cara pemakaian di dalam widget:
-///   final api = context.read<ApiClient>();
+///   `final api = context.read<ApiClient>();`
 ///   final data = await api.get('/habits/');
 ///   await api.post('/habits/', body: {'name': 'Bawa tumbler'});
 ///
