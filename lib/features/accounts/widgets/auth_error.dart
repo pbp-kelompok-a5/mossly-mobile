@@ -18,8 +18,22 @@ class AuthError extends StatelessWidget {
         decoration: BoxDecoration(
           color: scheme.errorContainer,
           borderRadius: BorderRadius.circular(MosslySpace.radiusMd),
+          border: Border.all(color: scheme.error.withValues(alpha: 0.25)),
         ),
-        child: Text(message, style: TextStyle(color: scheme.onErrorContainer)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.error_outline, color: scheme.error, size: 20),
+            const SizedBox(width: MosslySpace.s2),
+            Expanded(
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: scheme.onErrorContainer),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

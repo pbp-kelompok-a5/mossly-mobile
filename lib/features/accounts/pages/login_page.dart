@@ -7,6 +7,8 @@ import '../../../core/session.dart';
 import '../../../core/theme.dart';
 import '../services/auth_service.dart';
 import '../widgets/auth_error.dart';
+import '../widgets/auth_layout.dart';
+import '../widgets/auth_theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -65,118 +67,121 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    return MosslyAuthTheme(child: Builder(builder: _buildPage));
+  }
+
+  Widget _buildPage(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(MosslySpace.s6),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 440),
-              child: AutofillGroup(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Icon(Icons.eco_outlined, size: 56, color: scheme.primary),
-                      const SizedBox(height: MosslySpace.s4),
-                      Text(
-                        'Selamat datang di Mossly',
-                        style: text.headlineSmall,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: MosslySpace.s2),
-                      Text(
-                        'Masuk untuk melanjutkan langkah kecilmu.',
-                        style: text.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: MosslySpace.s8),
-                      TextFormField(
-                        controller: _username,
-                        enabled: !_loading,
-                        decoration: const InputDecoration(
-                          labelText: 'Username',
-                          prefixIcon: Icon(Icons.person_outline),
-                          border: OutlineInputBorder(),
+        child: AuthLayout(
+          child: AutofillGroup(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'SELAMAT DATANG KEMBALI',
+                    style: text.labelSmall?.copyWith(
+                      color: scheme.primary,
+                      letterSpacing: 1.1,
+                    ),
+                  ),
+                  const SizedBox(height: MosslySpace.s3),
+                  Text('Masuk ke Mossly', style: text.headlineSmall),
+                  const SizedBox(height: MosslySpace.s2),
+                  Text(
+                    'Masuk untuk melanjutkan langkah kecilmu.',
+                    style: text.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: MosslySpace.s8),
+                  TextFormField(
+                    controller: _username,
+                    enabled: !_loading,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                      hintText: 'Masukkan username',
+                      prefixIcon: Icon(Icons.person_outline),
+                    ),
+                    autofillHints: const [AutofillHints.username],
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
+                    textInputAction: TextInputAction.next,
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? 'Username wajib diisi.'
+                        : null,
+                  ),
+                  const SizedBox(height: MosslySpace.s6),
+                  TextFormField(
+                    controller: _password,
+                    enabled: !_loading,
+                    obscureText: _obscurePassword,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    autofillHints: const [AutofillHints.password],
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _login(),
+                    decoration: InputDecoration(
+                      labelText: 'Kata sandi',
+                      hintText: 'Masukkan kata sandi',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        tooltip: _obscurePassword
+                            ? 'Tampilkan kata sandi'
+                            : 'Sembunyikan kata sandi',
+                        onPressed: _loading
+                            ? null
+                            : () => setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              }),
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                         ),
-                        autofillHints: const [AutofillHints.username],
-                        autocorrect: false,
-                        textCapitalization: TextCapitalization.none,
-                        textInputAction: TextInputAction.next,
-                        validator: (value) =>
-                            value == null || value.trim().isEmpty
-                            ? 'Username wajib diisi.'
-                            : null,
                       ),
-                      const SizedBox(height: MosslySpace.s4),
-                      TextFormField(
-                        controller: _password,
-                        enabled: !_loading,
-                        obscureText: _obscurePassword,
-                        autocorrect: false,
-                        enableSuggestions: false,
-                        autofillHints: const [AutofillHints.password],
-                        textInputAction: TextInputAction.done,
-                        onFieldSubmitted: (_) => _login(),
-                        decoration: InputDecoration(
-                          labelText: 'Kata sandi',
-                          prefixIcon: const Icon(Icons.lock_outline),
-                          border: const OutlineInputBorder(),
-                          suffixIcon: IconButton(
-                            tooltip: _obscurePassword
-                                ? 'Tampilkan kata sandi'
-                                : 'Sembunyikan kata sandi',
-                            onPressed: _loading
-                                ? null
-                                : () => setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  }),
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
+                    ),
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Kata sandi wajib diisi.'
+                        : null,
+                  ),
+                  if (_error != null) ...[
+                    const SizedBox(height: MosslySpace.s4),
+                    AuthError(message: _error!),
+                  ],
+                  const SizedBox(height: MosslySpace.s6),
+                  FilledButton(
+                    onPressed: _loading ? null : _login,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_loading) ...[
+                          SizedBox(
+                            width: MosslySpace.s4,
+                            height: MosslySpace.s4,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: scheme.onSurfaceVariant,
                             ),
                           ),
+                          const SizedBox(width: MosslySpace.s2),
+                        ],
+                        Flexible(
+                          child: Text(_loading ? 'Sedang masuk...' : 'Masuk'),
                         ),
-                        validator: (value) => value == null || value.isEmpty
-                            ? 'Kata sandi wajib diisi.'
-                            : null,
-                      ),
-                      if (_error != null) ...[
-                        const SizedBox(height: MosslySpace.s4),
-                        AuthError(message: _error!),
+                        if (!_loading) ...[
+                          const SizedBox(width: MosslySpace.s2),
+                          const Icon(Icons.arrow_forward, size: 20),
+                        ],
                       ],
-                      const SizedBox(height: MosslySpace.s6),
-                      FilledButton(
-                        onPressed: _loading ? null : _login,
-                        child: Padding(
-                          padding: const EdgeInsets.all(MosslySpace.s3),
-                          child: _loading
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(
-                                      width: MosslySpace.s4,
-                                      height: MosslySpace.s4,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: scheme.primary,
-                                      ),
-                                    ),
-                                    const SizedBox(width: MosslySpace.s2),
-                                    const Text('Sedang masuk...'),
-                                  ],
-                                )
-                              : const Text('Masuk'),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
