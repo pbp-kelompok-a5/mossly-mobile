@@ -10,6 +10,6 @@ class AppConfig {
   static const String apiPrefix = '/api/v1';
 
   /// Token untuk pengembangan, dipakai selama halaman login belum selesai.
-  /// python manage.py drf_create_token <username>
+  /// `python manage.py drf_create_token <username>`
   static const String devToken = String.fromEnvironment('DEV_TOKEN');
 }
