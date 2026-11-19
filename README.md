@@ -26,18 +26,24 @@ Setiap anggota melanjutkan modul yang sama dengan Proyek Tengah Semester, yang m
 *Dikerjakan oleh Sheva Aquila Mahardika*  
 Tab **Profil** · `lib/features/accounts/`  
 Modul ini menangani registrasi, login, logout, serta pengelolaan sesi berbasis token untuk menjaga status autentikasi pengguna. Tersedia juga *onboarding form* setelah menyelesaikan registrasi untuk menyesuaikan data awal untuk input bagian tracker nantinya. Modul ini juga akan menyediakan data identitas yang diambil untuk tampilan di modul *Sustainability Community*.
+
 2. **Carbon Footprint Tracker**  
 *Dikerjakan oleh Callysta Arviana*  
 Tab **Karbon** · `lib/features/carbon/`  
 Modul ini memungkinkan pengguna mencatat perjalanan sehari-hari dan menghitung estimasi emisi karbon yang dihasilkan. Pengguna memasukkan titik asal dan tujuan, yang kemudian diproses melalui public API sehingga jarak tempuh dihitung otomatis, bukan diinput manual. Jarak tersebut dikalikan dengan faktor emisi sesuai moda transportasi yang dipilih untuk menghasilkan estimasi emisi CO2 per perjalanan. Seluruh riwayat perjalanan disimpan di server dan ditampilkan sebagai daftar data perjalanan, sedangkan visualisasinya ada di modul *Personal Sustainability Dashboard*.
+
 3. **Sustainable Habit & Goal Tracker**  
 *Dikerjakan oleh Tania Ju*  
 Tab **Habit** · `lib/features/habits/`  
-Modul ini membantu pengguna membangun kebiasaan berkelanjutan sekaligus mencapai target spesifik, menjadi dua bagian yang saling melengkapi. Pada bagian Habit, pengguna mencatat kebiasaan harian yang bersifat recurring seperti membawa tumbler, menggunakan transportasi umum, atau memilah sampah. Pada bagian Goal, pengguna dapat membuat target dengan deadline tertentu (misalnya "naik transportasi umum 20 kali dalam sebulan") beserta checklist dan progress bar untuk memantau penyelesaiannya. Setiap kali sebuah goal selesai atau sebuah habit mencapai milestone streak tertentu, pencapaian tersebut direkap oleh *Personal Sustainability Dashboard* dan dievaluasi sebagai bagian dari pencapaian keseluruhan pengguna.
+Modul ini membantu pengguna membangun kebiasaan berkelanjutan sekaligus mencapai target spesifik. Pada bagian *Habit*, pengguna dapat membuat, mengedit, dan menghapus kebiasaan harian yang bersifat *recurring* (misalnya membawa tumbler atau memilah sampah), melakukan dan membatalkan *check-in*, serta melihat status hari ini dan *streak* setiap kebiasaan. Pada bagian *Goal*, pengguna dapat membuat target dengan *deadline* tertentu (misalnya "naik transportasi umum 20 kali dalam sebulan"), mencatat progres, dan mencentang item *checklist*, dengan *progress bar* untuk memantau penyelesaiannya. Setiap kali sebuah *goal* selesai atau sebuah *habit* mencapai *milestone streak* tertentu, pencapaian tersebut direkap oleh modul *Personal Sustainability Dashboard*.
+
+    **Perubahan scope:** riwayat habit dan goal serta fitur mengedit dan menghapus *goal* tidak dibuat di aplikasi mobile, semuanya tetap tersedia di situs web.
+
 4. **Sustainability Community**  
 *Dikerjakan oleh Isybal Sama Eleazar Malau*  
 Tab **Komunitas** · `lib/features/community/`  
 Modul ini menyediakan forum sosial tempat pengguna berbagi tips dan pengalaman seputar gaya hidup berkelanjutan. Pengguna dapat membuat, mengedit, dan menghapus *thread* miliknya sendiri, memberikan reply pada *thread* orang lain, serta memberi like/unlike. Setiap *thread* dapat diberi tag/kategori (misalnya tips, achievement, atau general) untuk memudahkan navigasi. Nama dan avatar penulis pada setiap thread/reply diambil dari modul *Login* berdasarkan *user_id*. Modul ini juga menampilkan post otomatis saat pengguna meraih achievement baru, dengan data pencapaian yang berasal dari modul *Personal Sustainability Dashboard*.
+
 5. **Personal Sustainability Dashboard**  
 *Dikerjakan oleh Fildza Hasnalia Nabila*  
 Tab **Dashboard** · `lib/features/dashboard/`  
