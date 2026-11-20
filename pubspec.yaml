@@ -61,6 +61,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - lib/features/carbon/assets/
     - assets/branding/mossly-mark.png
     - assets/fonts/PlusJakartaSans-OFL.txt
     - assets/fonts/RedHatDisplay-OFL.txt

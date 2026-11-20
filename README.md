@@ -96,4 +96,41 @@ lib/
     ├── services/          # Pemanggilan endpoint modul
     ├── pages/             # Halaman
     └── widgets/           # Widget khusus modul
+
+## Carbon Footprint Tracker — Checkpoint 1
+
+Halaman Carbon menampilkan riwayat dan ringkasan dari Django REST Framework melalui `ApiClient` bersama. Data perjalanan tidak disimpan sebagai data contoh di aplikasi. Ringkasan mengikuti filter transportasi dan mencakup seluruh hasil, termasuk perjalanan pada halaman lain. Setiap halaman berisi maksimal 20 perjalanan.
+
+| Method | Endpoint | Data |
+| --- | --- | --- |
+| GET | `/api/v1/carbon/modes/` | Daftar moda transportasi aktif |
+| GET | `/api/v1/carbon/trips/?mode=&sort=&page=` | Riwayat, ringkasan, dan pagination |
+
+Urutan yang didukung adalah `newest`, `oldest`, `distance`, dan `emission`. Mengubah filter atau urutan mengembalikan daftar ke halaman pertama. Halaman menangani kondisi memuat, gagal dengan tombol coba lagi, kosong, serta tarik untuk memuat ulang. Data baru diminta ketika tab Carbon dibuka.
+
+Lingkup CP1 adalah membaca riwayat. Fitur tambah, detail, edit, hapus perjalanan, serta pencarian lokasi dan rute dikerjakan pada tahap berikutnya. Tombol hero pada CP1 mengarah ke riwayat agar tidak menampilkan aksi tambah yang belum tersedia.
+
+Desain acuan: [Riwayat Carbon mobile di Figma](https://www.figma.com/design/xMVSWGoAmsCNbc0IrEX4gX/PBP-LETSGOOO?node-id=1079-2019). Ilustrasi dan ikon Carbon memakai aset SVG situs web yang sama, dirender menjadi PNG untuk Flutter tanpa menambah package.
+
+Sebelum halaman login siap, token dapat dibuat di repo web dan dipakai saat menjalankan aplikasi:
+
+```bash
+python manage.py drf_create_token <username>
+flutter run --dart-define=DEV_TOKEN=<token>
+```
+
+Untuk backend lokal, tambahkan `--dart-define=API_BASE_URL=<alamat-backend>` pada perintah Flutter. Backend yang dipilih harus sudah menyediakan dua endpoint di atas. Token harus berasal dari backend tersebut.
+
+Pemeriksaan sebelum PR:
+
+```bash
+flutter analyze
+flutter test
+```
+
+Pengujian Carbon berada di `test/features/carbon/`. Fixture JSON direkam dari respons endpoint DRF pada database pengujian lokal; fixture hanya dipakai oleh pengujian, bukan oleh aplikasi.
+
+### AI Disclosure — Carbon CP1 (Callysta Arviana)
+
+ChatGPT/Codex digunakan untuk menelaah `API_GUIDE.md`, `PROMPTS.md`, kode Carbon yang sudah ada, dan desain Figma; membantu implementasi endpoint DRF, model dan service Flutter, halaman riwayat, serta pengujiannya. Verifikasi mencakup kontrak JSON, kepemilikan data, filter, urutan, pagination, penanganan kegagalan, dan navigasi antar modul. Kode perlu dipahami oleh pemilik modul untuk penjelasan saat demo.
 ```
