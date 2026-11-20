@@ -1,0 +1,28 @@
+{
+  "modes": [
+    {
+      "id": 1,
+      "code": "mobil",
+      "name": "Mobil",
+      "geoapify_profile": "drive"
+    },
+    {
+      "id": 2,
+      "code": "motor",
+      "name": "Motor",
+      "geoapify_profile": "motorcycle"
+    },
+    {
+      "id": 3,
+      "code": "sepeda",
+      "name": "Sepeda",
+      "geoapify_profile": "bicycle"
+    },
+    {
+      "id": 4,
+      "code": "jalan",
+      "name": "Jalan Kaki",
+      "geoapify_profile": "walk"
+    }
+  ]
+}

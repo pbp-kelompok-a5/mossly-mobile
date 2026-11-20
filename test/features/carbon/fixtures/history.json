@@ -1,0 +1,61 @@
+{
+  "trips": [
+    {
+      "id": 1,
+      "date": "2026-11-20",
+      "origin": "Rumah · Beji, Depok",
+      "destination": "Universitas Indonesia, Depok",
+      "mode_code": "sepeda",
+      "mode_display": "Sepeda",
+      "distance_km": 4.2,
+      "emission_kg": 0.0,
+      "duration_s": null,
+      "distance_source": "routing",
+      "note": "Pagi yang cerah, pilih gowes ke kampus."
+    },
+    {
+      "id": 2,
+      "date": "2026-11-19",
+      "origin": "Stasiun Depok Baru, Depok",
+      "destination": "Margo City, Depok",
+      "mode_code": "motor",
+      "mode_display": "Motor",
+      "distance_km": 5.8,
+      "emission_kg": 0.66,
+      "duration_s": null,
+      "distance_source": "routing",
+      "note": ""
+    },
+    {
+      "id": 3,
+      "date": "2026-11-18",
+      "origin": "Margonda Raya, Depok",
+      "destination": "Kota Kasablanka, Jakarta Selatan",
+      "mode_code": "mobil",
+      "mode_display": "Mobil",
+      "distance_km": 24.6,
+      "emission_kg": 4.1,
+      "duration_s": null,
+      "distance_source": "routing",
+      "note": "Perjalanan ke Jakarta bersama keluarga."
+    }
+  ],
+  "summary": {
+    "total_trips": 3,
+    "total_distance_km": 34.6,
+    "total_co2e_kg": 4.76
+  },
+  "pagination": {
+    "page": 1,
+    "pages": 1,
+    "per_page": 20,
+    "count": 3,
+    "previous_page": null,
+    "next_page": null
+  },
+  "filters": {
+    "mode": "",
+    "sort": "newest"
+  },
+  "emission_metric": "CO2e"
+}
